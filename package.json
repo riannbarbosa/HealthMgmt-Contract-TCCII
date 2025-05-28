@@ -1,0 +1,22 @@
+{
+  "name": "health-management",
+  "version": "1.0.0",
+  "description": "A contract to manage data between pacientes and doctors using blockchain in ethereum ecosystem",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/riannbarbosa/HealthMgmt-Contract-TCCII.git"
+  },
+  "author": "Rian Barbosa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/riannbarbosa/HealthMgmt-Contract-TCCII/issues"
+  },
+  "homepage": "https://github.com/riannbarbosa/HealthMgmt-Contract-TCCII#readme"
+}
