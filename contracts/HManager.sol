@@ -1,12 +1,7 @@
-pragma solidity >=0.8.2 <0.9.0;
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.4.22 <0.9.0;
 
-
-/**
- * @title Storage
- * @dev Store & retrieve value in a variable
- * @custom:dev-run-script ./scripts/deploy_with_ethers.ts
- */
-contract RegisterCli {
+contract HManager {
 
     struct Record {
         string cid;
@@ -46,7 +41,7 @@ contract RegisterCli {
         require(patients[patientId].id == patientId, "Patient does not exist");
         _;
     }
-    
+
     modifier onlyAuthProvider() {
         require(doctors[msg.sender], "Not an authorized provider");
         _;
@@ -66,12 +61,21 @@ contract RegisterCli {
         string memory _fileName,
         string memory _patientName,
         address _patientId,
-        string calldata _diagnosis,
-        string calldata _treatment
+        string memory _diagnosis,
+        string memory _treatment
     ) public onlyAuthProvider patientExists(_patientId) {
 
         // Store & retrieve value in a variable
-       Record memory newRecord = Record(_cid, _fileName, _patientName, _patientId, _diagnosis, _treatment, msg.sender, block.timestamp);
+       Record memory newRecord = Record({
+            cid: _cid, // Assign the _cid parameter
+            fileName: _fileName, // Assign the _fileName parameter
+            patientName: _patientName,
+            patientId: _patientId,
+            diagnosis: _diagnosis,
+            treatment: _treatment,
+            doctorId: msg.sender,
+            timestamp: block.timestamp
+        });
         patients[_patientId].records.push(newRecord);
         
         emit RecordAdded(_cid, _patientId, msg.sender);
@@ -79,10 +83,10 @@ contract RegisterCli {
     }
 
    function addDoctor() public {
-        require(!doctors[msg.sender], "This doctor already exists!");
-        doctors[msg.sender] = true;
-        emit DoctorAdded(msg.sender);
-    }
+       require(!doctors[msg.sender], "Account is already a doctor");
+       doctors[msg.sender] = true;
+       emit DoctorAdded(msg.sender);
+   }
 
 
        function revokeDoctor(address _doctorId) public {
@@ -98,10 +102,10 @@ contract RegisterCli {
 
         emit PatientRemoved(_patientId);
     }
+
      function getPatientRecords(address _patientId) public view onlyAuthProvider patientExists(_patientId) returns (Record[] memory) {
         // Retrieve the record from the contract.;
         // Return all records with the same ID.
-        
         return patients[_patientId].records;
     }
 
